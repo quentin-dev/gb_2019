@@ -22,5 +22,7 @@ $(IHX): $(RELS)
 %.rel: %.c
 	$(CC) $(SDCCFLAGS) $^
 
+.PHONY: clean
+
 clean:
 	$(RM) $(ROM) $(IHX) $(RELS:.rel=.*)
