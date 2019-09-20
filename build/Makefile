@@ -2,13 +2,13 @@ CC = ../gbdk-n/bin/gbdk-n-compile.sh
 LD = ../gbdk-n/bin/gbdk-n-link.sh
 MAKER = ../gbdk-n/bin/gbdk-n-make-rom.sh
 
-SDCCFLAGS = -I../include
+SDCCFLAGS = -I ../include
 
 vpath %.c ../src
 
 ROM = game.gb
 
-RELS = tileset.rel tilemap.rel main.rel
+RELS = mapset.rel mapmap.rel main.rel
 IHX = main.ihx
 
 game: $(ROM)
