@@ -9,18 +9,18 @@ vpath %.c ../src
 ROM = game.gb
 
 RELS = tileset.rel tilemap.rel main.rel
-IHXS = main.ihx
+IHX = main.ihx
 
 game: $(ROM)
 
-$(ROM): $(IHXS)
+$(ROM): $(IHX)
 	$(MAKER) $^ $@
 
-$(IHXS): $(RELS)
+$(IHX): $(RELS)
 	$(LD) $^ -o $@
 
 %.rel: %.c
 	$(CC) $(SDCCFLAGS) $^
 
 clean:
-	$(RM) $(ROM) $(RELS) $(IHXS) main.* tileset.* tilemap.*
+	$(RM) $(ROM) $(IHX) $(RELS:.rel=.*)
