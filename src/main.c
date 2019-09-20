@@ -4,7 +4,7 @@
 #include "tilemap.h"
 #include "tileset.h"
 
-int main(void)
+void main(void)
 {
     set_bkg_data(0, TILESET_TILE_COUNT, TILESET);
     set_bkg_tiles(0, 0, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILEMAP);
@@ -30,6 +30,4 @@ int main(void)
 
         wait_vbl_done();
     }
-
-    return 0;
 }
