@@ -90,24 +90,28 @@ void main(void)
             player_direction = PLAYER_DIRECTION_UP;
             is_player_walking = 1;
             player_y -= 1;
+            scroll_bkg(0, -1);
         }
         else if (keys & J_DOWN)
         {
             player_direction = PLAYER_DIRECTION_DOWN;
             is_player_walking = 1;
             player_y += 1;
+            scroll_bkg(0, 1);
         }
         else if (keys & J_LEFT)
         {
             player_direction = PLAYER_DIRECTION_LEFT;
             is_player_walking = 1;
             player_x -= 1;
+            scroll_bkg(-1, 0);
         }
         else if (keys & J_RIGHT)
         {
             player_direction = PLAYER_DIRECTION_RIGHT;
             is_player_walking = 1;
             player_x += 1;
+            scroll_bkg(1, 0);
         }
         else
         {
@@ -117,8 +121,8 @@ void main(void)
 
         if (is_player_walking)
         {
-            move_sprite(PLAYER_SPRITE_L_ID, player_x, player_y);
-            move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
+            // move_sprite(PLAYER_SPRITE_L_ID, player_x, player_y);
+            // move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
 
             frame_skip -= 1;
             if (!frame_skip)
