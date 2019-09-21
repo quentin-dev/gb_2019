@@ -1,0 +1,14 @@
+image: sunbr0/gb_img:76755bd4
+
+stages:
+    - build
+
+rom:
+    stage: build
+    script:
+        - git submodule update --init
+        - make lib
+        - make
+    artifacts:
+        paths:
+            - build/game.gb
