@@ -123,6 +123,8 @@ void main(void)
             frame_skip -= 1;
             if (!frame_skip)
                 frame_skip = 8;
+            else
+                continue;
         }
         else
         {
