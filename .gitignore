@@ -1,3 +1,9 @@
+# Make generated files
 build/*.*
+
+# Images
 images/*.png
 *.png
+
+# Vim swap files
+*.swp
