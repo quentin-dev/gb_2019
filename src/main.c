@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <gb/gb.h>
 
 #include "mapmap.h"
@@ -6,8 +7,6 @@
 
 #define PLAYER_SPRITE_L_ID 0
 #define PLAYER_SPRITE_R_ID 1
-
-
 #define PLAYER_DIRECTION_DOWN 0
 #define PLAYER_DIRECTION_UP 6
 #define PLAYER_DIRECTION_RIGHT 12
@@ -37,6 +36,46 @@ UINT8 update_sprite_animation(UINT8 sprite_id, UINT8 *anim, UINT8 direction, UIN
     set_sprite_tile(sprite_id, tile_id);
 
     return (frame + 1) % len;
+}
+
+UINT8 collides_with_tree(UINT8 *tiles)
+{
+    UINT8 tree[6] = { 0x0, 0x1, 0x7, 0x8, 0x13, 0x14 };
+
+    for (UINT8 i = 0; i < 2; ++i)
+    {
+        for (UINT8 j = 0; j < 6; ++j)
+        {
+            if (tiles[i] == tree[j])
+                return 1;
+        }
+    }
+
+    return 0;
+}
+
+UINT8 collides_with_house(UINT8 *tiles)
+{
+    UINT8 house[28] = {
+        0x0B, 0x0C, 0x0D,
+        0x15, 0x16, 0x17,
+        0x1B, 0x1C, 0x1D,
+        0x23, 0x24, 0x25,
+        0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31,
+        0x32, 0x33, 0x34, 0x35,
+        0x36, 0x37, 0x38, 0x39, 0x3A,
+    };
+
+    for (UINT8 i = 0; i < 2; ++i)
+    {
+        for (UINT8 j = 0; j < 28; ++j)
+        {
+            if (tiles[i] == house[j])
+                return 1;
+        }
+    }
+
+    return 0;
 }
 
 void main(void)
@@ -79,39 +118,40 @@ void main(void)
     move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
     set_sprite_prop(PLAYER_SPRITE_R_ID, S_PALETTE);
 
+    UINT8 tile[2] = { 255, 255, }; 
+
     while (1)
     {
         wait_vbl_done();
 
         keys = joypad();
 
+        UINT8 prev_x = player_x;
+        UINT8 prev_y = player_y;
+
         if (keys & J_UP)
         {
             player_direction = PLAYER_DIRECTION_UP;
             is_player_walking = 1;
             player_y -= 1;
-            scroll_bkg(0, -1);
         }
         else if (keys & J_DOWN)
         {
             player_direction = PLAYER_DIRECTION_DOWN;
             is_player_walking = 1;
             player_y += 1;
-            scroll_bkg(0, 1);
         }
         else if (keys & J_LEFT)
         {
             player_direction = PLAYER_DIRECTION_LEFT;
             is_player_walking = 1;
             player_x -= 1;
-            scroll_bkg(-1, 0);
         }
         else if (keys & J_RIGHT)
         {
             player_direction = PLAYER_DIRECTION_RIGHT;
             is_player_walking = 1;
             player_x += 1;
-            scroll_bkg(1, 0);
         }
         else
         {
@@ -122,6 +162,16 @@ void main(void)
         if (is_player_walking)
         {
             // move_sprite(PLAYER_SPRITE_L_ID, player_x, player_y);
+            get_bkg_tiles(player_x / 8, player_y / 8, 2, 1, tile);
+
+            // if (tile[0] == 0x05 && tile[1] == 0x05)
+            if (collides_with_tree(tile) == 1 || collides_with_house(tile) == 1)
+            {
+                player_x = prev_x;
+                player_y = prev_y;
+            }
+            else
+                scroll_bkg(player_x - prev_x, player_y - prev_y);
             // move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
 
             frame_skip -= 1;
