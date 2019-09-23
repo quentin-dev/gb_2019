@@ -5,12 +5,7 @@
 #include "mapset.h"
 #include "player_sprites.h"
 
-#define PLAYER_SPRITE_L_ID 0
-#define PLAYER_SPRITE_R_ID 1
-#define PLAYER_DIRECTION_DOWN 0
-#define PLAYER_DIRECTION_UP 6
-#define PLAYER_DIRECTION_RIGHT 12
-#define PLAYER_DIRECTION_LEFT 18
+#include "player.h"
 
 void flip_sprite_horiz(UINT8 sprite_id)
 {
@@ -80,15 +75,10 @@ UINT8 collides_with_house(UINT8 *tiles)
 
 void main(void)
 {
-
     UINT8 keys = 0;
     UINT8 frame_skip = 8;
 
-    UINT8 player_x = 80;
-    UINT8 player_y = 72;
-    UINT8 player_direction = PLAYER_DIRECTION_DOWN;
-    UINT8 player_animation_frame = 0;
-    UINT8 is_player_walking = 0;
+    Player *player = create_player();
 
     UINT8 PLAYER_SPRITE_ANIM_L[] = {
         4, 0, 0, 4, 0, 8,
@@ -112,83 +102,67 @@ void main(void)
     SPRITES_8x16;
     SHOW_SPRITES;
 
-    move_sprite(PLAYER_SPRITE_L_ID, player_x, player_y);
+    move_sprite(PLAYER_SPRITE_L_ID, player->x, player->y);
     set_sprite_prop(PLAYER_SPRITE_L_ID, S_PALETTE);
 
-    move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
+    move_sprite(PLAYER_SPRITE_R_ID, player->x + 8, player->y);
     set_sprite_prop(PLAYER_SPRITE_R_ID, S_PALETTE);
 
-    UINT8 tile[2] = { 255, 255, }; 
+    UINT8 tile[2] = { 255, 255, };
 
     while (1)
     {
-        wait_vbl_done();
-
         keys = joypad();
 
-        UINT8 prev_x = player_x;
-        UINT8 prev_y = player_y;
+        UINT8 prev_x = player->x;
+        UINT8 prev_y = player->y;
 
         if (keys & J_UP)
-        {
-            player_direction = PLAYER_DIRECTION_UP;
-            is_player_walking = 1;
-            player_y -= 1;
-        }
+            update_direction_data(player, PLAYER_DIRECTION_UP);
         else if (keys & J_DOWN)
-        {
-            player_direction = PLAYER_DIRECTION_DOWN;
-            is_player_walking = 1;
-            player_y += 1;
-        }
+            update_direction_data(player, PLAYER_DIRECTION_DOWN);
         else if (keys & J_LEFT)
-        {
-            player_direction = PLAYER_DIRECTION_LEFT;
-            is_player_walking = 1;
-            player_x -= 1;
-        }
+            update_direction_data(player, PLAYER_DIRECTION_LEFT);
         else if (keys & J_RIGHT)
-        {
-            player_direction = PLAYER_DIRECTION_RIGHT;
-            is_player_walking = 1;
-            player_x += 1;
-        }
+            update_direction_data(player, PLAYER_DIRECTION_RIGHT);
         else
         {
-            is_player_walking = 0;
+            player->is_walking = 0;
             frame_skip = 1;
         }
 
-        if (is_player_walking)
+        if (player->is_walking)
         {
-            // move_sprite(PLAYER_SPRITE_L_ID, player_x, player_y);
-            get_bkg_tiles(player_x / 8, player_y / 8, 2, 1, tile);
+            get_bkg_tiles(player->x / 8, player->y / 8, 2, 1, tile);
 
-            // if (tile[0] == 0x05 && tile[1] == 0x05)
             if (collides_with_tree(tile) == 1 || collides_with_house(tile) == 1)
             {
-                player_x = prev_x;
-                player_y = prev_y;
+                player->x = prev_x;
+                player->y = prev_y;
             }
             else
-                scroll_bkg(player_x - prev_x, player_y - prev_y);
-            // move_sprite(PLAYER_SPRITE_R_ID, player_x + 8, player_y);
+                scroll_bkg(player->x - prev_x, player->y - prev_y);
 
             frame_skip -= 1;
             if (!frame_skip)
                 frame_skip = 8;
             else
+            {
+                wait_vbl_done();
                 continue;
+            }
         }
         else
         {
-            player_animation_frame = 0;
+            player->animation_frame = 0;
         }
 
         update_sprite_animation(PLAYER_SPRITE_L_ID, PLAYER_SPRITE_ANIM_L,
-                player_direction, player_animation_frame);
+                player->direction, player->animation_frame);
 
-        player_animation_frame = update_sprite_animation(PLAYER_SPRITE_R_ID,
-                PLAYER_SPRITE_ANIM_R, player_direction, player_animation_frame);
+        player->animation_frame = update_sprite_animation(PLAYER_SPRITE_R_ID,
+                PLAYER_SPRITE_ANIM_R, player->direction, player->animation_frame);
+
+        wait_vbl_done();
     }
 }

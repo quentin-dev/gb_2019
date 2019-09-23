@@ -8,7 +8,7 @@ vpath %.c ../src
 
 ROM = game.gb
 
-RELS = mapmap.rel mapset.rel player_sprites.rel main.rel
+RELS = player.rel mapmap.rel mapset.rel player_sprites.rel main.rel
 IHX = main.ihx
 
 game: $(ROM)
