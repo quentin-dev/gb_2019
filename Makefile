@@ -4,6 +4,8 @@ game:
 lib:
 	make -C gbdk-n
 
+all: lib game
+
 .PHONY: clean
 
 clean:
