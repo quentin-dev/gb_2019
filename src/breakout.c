@@ -75,8 +75,23 @@ void move_ball(struct Ball *ball, enum DIRECTION dir)
     }
 }
 
-// FIXME: Implement collision detection
-// void check_collision(struct Ball *ball, struct Paddle *paddle)
+UINT8 check_collision(struct Ball *ball, struct Paddle *paddle)
+{
+    UINT8 b_rx = ball->x + 8;
+    UINT8 b_ry = ball->y + 8;
+
+    UINT8 p_rx = paddle->x + 24;
+    UINT8 p_ry = paddle->y + 8;
+
+
+    UINT8 x_overlap = (ball->x >= paddle->x && ball->x <=p_rx) ||
+                      (paddle->x >= ball->x && paddle->x <= b_rx);
+
+    UINT8 y_overlap = (ball->y >= paddle->y && ball->y <= p_ry) ||
+                      (paddle->y >= ball->y && paddle->y <= b_ry);
+
+    return x_overlap && y_overlap;
+}
 
 void main(void)
 {
@@ -103,6 +118,8 @@ void main(void)
 
     UINT8 keys = 0; 
 
+    enum DIRECTION dir = DOWN;
+
     while(1)
     {
 
@@ -112,10 +129,13 @@ void main(void)
             move_paddle(&paddle, RIGHT);
         else if (keys & J_LEFT)
             move_paddle(&paddle, LEFT);
-
-        move_ball(&ball, DOWN);
-    
-        // check_collision(&ball, &paddle);
+        
+        if (check_collision(&ball, &paddle))
+            dir = UP;
+        else if (ball.y <= 16 + 8)
+            dir = DOWN;
+        
+        move_ball(&ball, dir);
 
         if (paddle.moved)
             move_paddle_sprites(&paddle);
