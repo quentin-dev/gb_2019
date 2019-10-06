@@ -8,8 +8,10 @@
 
 enum DIRECTION
 {
-    LEFT = -1,
-    RIGHT = 1,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 };
 
 struct Ball
@@ -26,6 +28,7 @@ struct Paddle
     UINT8 right;
     UINT8 x;
     UINT8 y;
+    UINT8 moved;
 };
 
 void move_paddle_sprites(struct Paddle *paddle)
@@ -33,6 +36,8 @@ void move_paddle_sprites(struct Paddle *paddle)
     move_sprite(paddle->left, paddle->x, paddle->y);
     move_sprite(paddle->center, paddle->x + 8, paddle->y);
     move_sprite(paddle->right, paddle->x + 16, paddle->y);
+    
+    paddle->moved = 0;
 }
 
 void move_paddle(struct Paddle *paddle, enum DIRECTION dir)
@@ -45,9 +50,33 @@ void move_paddle(struct Paddle *paddle, enum DIRECTION dir)
     else if (dir == LEFT)
         new_x -= SPEED;
 
-    if (new_x < 160 - 8 - 16 && new_x > 16)
+    if (new_x <= 168 - 8 - 24 && new_x >= 8 + 8)
+    {
         paddle->x = new_x;
+        paddle->moved = 1;
+    }
 }
+
+void move_ball(struct Ball *ball, enum DIRECTION dir)
+{
+    if (dir == UP || dir == DOWN)
+    {
+        UINT8 new_y = (dir == DOWN) ? ball->y + 1 : ball->y - 1;
+
+        if (new_y >= 16 + 8 && new_y <= 160 - 8)
+            ball->y = new_y;
+    }
+    else if (dir == LEFT || dir == RIGHT)
+    {
+        UINT8 new_x = (dir == LEFT) ? ball->x - 1 : ball->x + 1;
+
+        if (new_x >= 8 + 8 && new_x <= 166 - 8 - 8)
+            ball->x = new_x;
+    }
+}
+
+// FIXME: Implement collision detection
+// void check_collision(struct Ball *ball, struct Paddle *paddle)
 
 void main(void)
 {
@@ -63,7 +92,7 @@ void main(void)
     set_sprite_tile(2, 128 + 0x0D); // Paddle middle
     set_sprite_tile(3, 128 + 0x0E); // Paddle right
 
-    struct Paddle paddle = { 1, 2, 3, 76, 152 };
+    struct Paddle paddle = { 1, 2, 3, 76, 152, 0};
 
     move_sprite(ball.sprite, ball.x, ball.y); // Set ball position
 
@@ -84,7 +113,14 @@ void main(void)
         else if (keys & J_LEFT)
             move_paddle(&paddle, LEFT);
 
-        move_paddle_sprites(&paddle);
+        move_ball(&ball, DOWN);
+    
+        // check_collision(&ball, &paddle);
+
+        if (paddle.moved)
+            move_paddle_sprites(&paddle);
+
+        move_sprite(ball.sprite, ball.x, ball.y);
 
         wait_vbl_done();
     }
