@@ -116,9 +116,10 @@ void main(void)
 
     SHOW_SPRITES;
 
-    UINT8 keys = 0; 
+    UINT8 keys = 0;
 
     enum DIRECTION dir = DOWN;
+    enum DIRECTION side = UP;
 
     while(1)
     {
@@ -131,10 +132,32 @@ void main(void)
             move_paddle(&paddle, LEFT);
         
         if (check_collision(&ball, &paddle))
+        {
             dir = UP;
-        else if (ball.y <= 16 + 8)
-            dir = DOWN;
-        
+
+            if (ball.x < paddle.x + 12)
+                side = LEFT;
+            else if (ball.x > paddle.x + 12)
+                side = RIGHT;
+            else
+                side = UP;
+        }
+        else
+        {
+            if (ball.y <= 16 + 8)
+                dir = DOWN;
+            
+            if (ball.x <= 8 + 8)
+                side = RIGHT;
+            else if (ball.x >= 166 - 8 - 8)
+                side = LEFT;
+        }
+       
+        // FIXME: Move ball depending on where it hits the paddle
+
+        if (side != UP)
+            move_ball(&ball, side);
+
         move_ball(&ball, dir);
 
         if (paddle.moved)
