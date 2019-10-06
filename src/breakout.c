@@ -93,6 +93,19 @@ UINT8 check_collision(struct Ball *ball, struct Paddle *paddle)
     return x_overlap && y_overlap;
 }
 
+enum DIRECTION reverse_direction(enum DIRECTION dir)
+{
+    if (dir == RIGHT)
+        return LEFT;
+    if (dir == LEFT)
+        return RIGHT;
+
+    if (dir == UP)
+        return DOWN;
+    if (dir == DOWN)
+        return UP;
+}
+
 void main(void)
 {
     set_bkg_data(128, TILESET_TILE_COUNT, TILESET);
@@ -121,6 +134,10 @@ void main(void)
     enum DIRECTION dir = DOWN;
     enum DIRECTION side = UP;
 
+    unsigned char tiles[2];
+
+    unsigned char blank[2] = { 0x80, 0x80 };
+
     while(1)
     {
 
@@ -144,6 +161,19 @@ void main(void)
         }
         else
         {
+            get_bkg_tiles(ball.x / 8, ball.y / 8, 2, 1, tiles);
+
+            if (tiles[0] == 0x88 || tiles[1] == 0x89 || tiles[1] == 0x88)
+            {
+                set_bkg_tiles(ball.x / 8, ball.y / 8, 2, 1, blank);
+                dir = reverse_direction(dir);
+            }
+            else if (tiles[0] == 0x89)
+            {
+                set_bkg_tiles((ball.x / 8) - 1, ball.y / 8, 2, 1, blank);
+                dir = reverse_direction(dir);
+            }
+
             if (ball.y <= 16 + 8)
                 dir = DOWN;
             
@@ -153,8 +183,6 @@ void main(void)
                 side = LEFT;
         }
        
-        // FIXME: Move ball depending on where it hits the paddle
-
         if (side != UP)
             move_ball(&ball, side);
 
