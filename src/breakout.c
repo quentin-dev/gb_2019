@@ -104,6 +104,8 @@ enum DIRECTION reverse_direction(enum DIRECTION dir)
         return DOWN;
     if (dir == DOWN)
         return UP;
+    
+    return dir;
 }
 
 void main(void)
@@ -112,13 +114,15 @@ void main(void)
     set_bkg_tiles(0, 0, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILEMAP);
     SHOW_BKG;
 
-    set_sprite_tile(0, 128 + 0x0F); // Ball
+    set_sprite_tile(0, 143); // Ball : 128 + 0x0F
 
     struct Ball ball = { 0, 50, 120 };
 
-    set_sprite_tile(1, 128 + 0x0C); // Paddle left
-    set_sprite_tile(2, 128 + 0x0D); // Paddle middle
-    set_sprite_tile(3, 128 + 0x0E); // Paddle right
+    UINT8 idx = 140; // 128 + 0x0C
+
+    set_sprite_tile(1, idx); // Paddle left
+    set_sprite_tile(2, idx + 1); // Paddle middle
+    set_sprite_tile(3, idx + 2); // Paddle right
 
     struct Paddle paddle = { 1, 2, 3, 76, 152, 0};
 
