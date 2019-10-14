@@ -1,4 +1,4 @@
-image: sunbr0/gb_img:996914c9
+image: sunbr0/gb_img:21f4425e
 
 stages:
     - build
@@ -8,6 +8,7 @@ rom:
     script:
         - git submodule update --init
         - make lib
+        - make check
         - make
     artifacts:
         paths:
