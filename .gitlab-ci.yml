@@ -1,4 +1,4 @@
-image: sunbr0/gb_img:21f4425e
+image: sunbr0/gb_img:a23de906
 
 stages:
     - build
