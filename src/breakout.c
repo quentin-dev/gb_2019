@@ -1,79 +1,13 @@
 #include <gb/gb.h>
 
-#include "breakoutset.h"
-#include "breakoutmap.h"
+#include "tilesets/breakoutset.h"
+#include "tilemaps/breakoutmap.h"
 
-#define SPRITE_OFFSET 128
-#define SPEED 2
+#include "defines.h"
 
-enum DIRECTION
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-};
-
-struct Ball
-{
-    UINT8 sprite;
-    UINT8 x;
-    UINT8 y;
-};
-
-struct Paddle
-{
-    UINT8 left;
-    UINT8 center;
-    UINT8 right;
-    UINT8 x;
-    UINT8 y;
-    UINT8 moved;
-};
-
-void move_paddle_sprites(struct Paddle *paddle)
-{
-    move_sprite(paddle->left, paddle->x, paddle->y);
-    move_sprite(paddle->center, paddle->x + 8, paddle->y);
-    move_sprite(paddle->right, paddle->x + 16, paddle->y);
-    
-    paddle->moved = 0;
-}
-
-void move_paddle(struct Paddle *paddle, enum DIRECTION dir)
-{
-
-    UINT8 new_x = paddle->x;
-
-    if (dir == RIGHT)
-        new_x += SPEED;
-    else if (dir == LEFT)
-        new_x -= SPEED;
-
-    if (new_x <= 168 - 8 - 24 && new_x >= 8 + 8)
-    {
-        paddle->x = new_x;
-        paddle->moved = 1;
-    }
-}
-
-void move_ball(struct Ball *ball, enum DIRECTION dir)
-{
-    if (dir == UP || dir == DOWN)
-    {
-        UINT8 new_y = (dir == DOWN) ? ball->y + 1 : ball->y - 1;
-
-        if (new_y >= 16 + 8 && new_y <= 160 - 8)
-            ball->y = new_y;
-    }
-    else if (dir == LEFT || dir == RIGHT)
-    {
-        UINT8 new_x = (dir == LEFT) ? ball->x - 1 : ball->x + 1;
-
-        if (new_x >= 8 + 8 && new_x <= 166 - 8 - 8)
-            ball->x = new_x;
-    }
-}
+#include "direction.h"
+#include "paddle.h"
+#include "ball.h"
 
 UINT8 check_collision(struct Ball *ball, struct Paddle *paddle)
 {
@@ -165,16 +99,16 @@ void main(void)
         }
         else
         {
-            get_bkg_tiles(ball.x / 8, ball.y / 8, 2, 1, tiles);
+            get_bkg_tiles((ball.x / 8) + 1, (ball.y / 8) + 2, 2, 1, tiles);
 
             if (tiles[0] == 0x88 || tiles[1] == 0x89 || tiles[1] == 0x88)
             {
-                set_bkg_tiles(ball.x / 8, ball.y / 8, 2, 1, blank);
+                set_bkg_tiles((ball.x / 8) + 1, (ball.y / 8) + 2, 2, 1, blank);
                 dir = reverse_direction(dir);
             }
             else if (tiles[0] == 0x89)
             {
-                set_bkg_tiles((ball.x / 8) - 1, ball.y / 8, 2, 1, blank);
+                set_bkg_tiles(((ball.x) / 8), ((ball.y) / 8) + 2, 2, 1, blank);
                 dir = reverse_direction(dir);
             }
 
