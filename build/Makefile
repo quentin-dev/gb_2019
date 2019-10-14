@@ -5,6 +5,15 @@ MAKER = ../gbdk-n/bin/gbdk-n-make-rom.sh
 SDCCFLAGS = -I ../include
 
 vpath %.c ../src
+vpath %.c ../tests
+
+TEST_CC = gcc
+TEST_CFLAGS = -I ../include -Wall -Wextra -Werror -std=c99 -pedantic
+TEST_LD_FLAGS = -lcriterion
+
+TEST_OBJS = test_direction.o direction.o
+
+TESTS = test_direction
 
 ROM = game.gb
 
@@ -25,7 +34,19 @@ $(IHX): $(RELS)
 %.rel: %.c
 	$(CC) $(SDCCFLAGS) $^
 
+check: $(TESTS)
+	for t in $(TESTS); do \
+		echo "Running $$t"; \
+		./$$t; \
+	done;
+
+test_%: test_%.o %.o
+	$(TEST_CC) -o $@ $^ $(TEST_LD_FLAGS)
+
+%.o: %.c
+	$(TEST_CC) $(TEST_CFLAGS) -c $^
+
 .PHONY: clean
 
 clean:
-	$(RM) $(ROM) $(IHX:.ihx=.*) $(RELS:.rel=.*)
+	$(RM) $(ROM) $(IHX:.ihx=.*) $(RELS:.rel=.*) $(TESTS) $(TEST_OBJS) 
