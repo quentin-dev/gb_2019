@@ -20,3 +20,7 @@ The result is the `build/game.gb` file.
 ### Cleaning
 
 You can clean the build directory by running `make clean`.
+
+### Other
+
+This project is also hosted on Github
