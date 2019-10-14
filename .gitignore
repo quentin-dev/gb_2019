@@ -1,5 +1,6 @@
 # Make generated files
 build/*.*
+build/test_*
 
 # Images
 images/*.png
