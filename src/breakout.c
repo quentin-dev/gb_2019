@@ -1,46 +1,15 @@
 #include <gb/gb.h>
-
+// Sprites
 #include "tilesets/breakoutset.h"
 #include "tilemaps/breakoutmap.h"
-
+// Defines
 #include "defines.h"
-
+// Engine constructs
 #include "direction.h"
+#include "collision.h"
+// Game objects
 #include "paddle.h"
 #include "ball.h"
-
-UINT8 check_collision(struct Ball *ball, struct Paddle *paddle)
-{
-    UINT8 b_rx = ball->x + 8;
-    UINT8 b_ry = ball->y + 8;
-
-    UINT8 p_rx = paddle->x + 24;
-    UINT8 p_ry = paddle->y + 8;
-
-
-    UINT8 x_overlap = (ball->x >= paddle->x && ball->x <=p_rx) ||
-                      (paddle->x >= ball->x && paddle->x <= b_rx);
-
-    UINT8 y_overlap = (ball->y >= paddle->y && ball->y <= p_ry) ||
-                      (paddle->y >= ball->y && paddle->y <= b_ry);
-
-    return x_overlap && y_overlap;
-}
-
-enum DIRECTION reverse_direction(enum DIRECTION dir)
-{
-    if (dir == RIGHT)
-        return LEFT;
-    if (dir == LEFT)
-        return RIGHT;
-
-    if (dir == UP)
-        return DOWN;
-    if (dir == DOWN)
-        return UP;
-    
-    return dir;
-}
 
 void main(void)
 {

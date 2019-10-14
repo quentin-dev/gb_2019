@@ -9,4 +9,6 @@ enum DIRECTION
     RIGHT,
 };
 
+enum DIRECTION reverse_direction(enum DIRECTION dir);
+
 #endif // ! DIRECTION_H

@@ -10,6 +10,8 @@ ROM = game.gb
 
 # RELS = player.rel mapmap.rel mapset.rel player_sprites.rel main.rel
 RELS = breakoutset.rel breakoutmap.rel breakout.rel paddle.rel ball.rel
+RELS += collision.rel direction.rel
+
 IHX = main.ihx
 
 game: $(ROM)
@@ -26,4 +28,4 @@ $(IHX): $(RELS)
 .PHONY: clean
 
 clean:
-	$(RM) $(ROM) $(IHX) $(RELS:.rel=.*)
+	$(RM) $(ROM) $(IHX:.ihx=.*) $(RELS:.rel=.*)
