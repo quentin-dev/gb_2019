@@ -68,6 +68,7 @@ void main(void)
         }
         else
         {
+            /*
             get_bkg_tiles((ball.x / 8) + 1, (ball.y / 8) + 2, 2, 1, tiles);
 
             if (tiles[0] == 0x88 || tiles[1] == 0x89 || tiles[1] == 0x88)
@@ -78,6 +79,17 @@ void main(void)
             else if (tiles[0] == 0x89)
             {
                 set_bkg_tiles(((ball.x) / 8), ((ball.y) / 8) + 2, 2, 1, blank);
+                dir = reverse_direction(dir);
+            }
+            */
+
+            if (side != UP && check_brick(&ball, side))
+            {
+                side = reverse_direction(side);
+            }
+
+            if (check_brick(&ball, dir))
+            {
                 dir = reverse_direction(dir);
             }
 

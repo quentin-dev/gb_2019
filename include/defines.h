@@ -10,4 +10,8 @@
 /// Paddle speed
 #define SPEED 2
 
+#define EMPTY_TILE (SPRITE_OFFSET + 0)
+#define BRICK_L 136
+#define BRICK_R 137
+
 #endif // ! DEFINES_H
