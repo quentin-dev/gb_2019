@@ -20,3 +20,24 @@ The result is the `build/game.gb` file.
 ### Cleaning
 
 You can clean the build directory by running `make clean`.
+
+
+## State of the project
+
+### Currently
+
+The game is "playable", meaning you can break the bricks and move the paddle.
+
+### Probably
+
+The collisions are not exactly perfect yet, there is still a slight offset due
+to the way position in handled. Also, the code should be refactored a bit to
+make it more readable.
+
+### Eventually
+
+The following things should be added to make this a full game:
+
+* A game over screen
+* A start menu
+* Sound effects / music
