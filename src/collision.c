@@ -48,9 +48,15 @@ UINT8 check_brick(struct Ball *ball, enum DIRECTION dir)
     get_bkg_tiles(next_cell_x, next_cell_y, 1, 1, next_cell);
 
     if (next_cell[0] == BRICK_L)
+    {
         remove_brick(next_cell_x, next_cell_y);
+        ball->bricks += 1;
+    }
     else if (next_cell[0] == BRICK_R)
+    {
         remove_brick(next_cell_x - 1, next_cell_y);
+        ball->bricks += 1;
+    }
 
     return next_cell[0] != EMPTY_TILE;
 }

@@ -1,4 +1,7 @@
 #include <gb/gb.h>
+// Text IO
+#include <gb/console.h>
+#include <stdio.h>
 // Sprites
 #include "tilesets/breakoutset.h"
 #include "tilemaps/breakoutmap.h"
@@ -13,6 +16,21 @@
 
 void title_screen(void)
 {
+    setchar(' '); // Needed for gotoxy() to work :thonking:
+    gotoxy(6, 5);
+    printf("BREAKOUT");
+    gotoxy(3, 13);
+    printf("- Press START -");
+    waitpad(J_START);
+    waitpadup();
+}
+
+void end_screen(char *str, UINT8 len)
+{
+    gotoxy(10 - (len / 2), 5);
+    printf(str);
+    gotoxy(3, 13);
+    printf("- Press START -");
     waitpad(J_START);
     waitpadup();
 }
@@ -21,13 +39,15 @@ void main(void)
 {
     title_screen();
 
+START:
+
     set_bkg_data(128, TILESET_TILE_COUNT, TILESET);
     set_bkg_tiles(0, 0, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILEMAP);
     SHOW_BKG;
 
     set_sprite_tile(0, 143); // Ball : 128 + 0x0F
 
-    struct Ball ball = { 0, 50, 120 };
+    struct Ball ball = { 0, 76 + 12, 120, 0 };
 
     UINT8 idx = 140; // 128 + 0x0C
 
@@ -48,6 +68,8 @@ void main(void)
 
     enum DIRECTION dir = DOWN;
     enum DIRECTION side = UP;
+
+    UINT8 remaining_bricks = 45;
 
     while(1)
     {
@@ -72,6 +94,7 @@ void main(void)
         }
         else
         {
+
             if (side != UP && check_brick(&ball, side))
             {
                 side = reverse_direction(side);
@@ -82,8 +105,20 @@ void main(void)
                 dir = reverse_direction(dir);
             }
 
+            if (ball.bricks == LVL1_BRICKS)
+            {
+                end_screen("YOU WIN!", 8);
+                goto START;
+            }
+
             if (ball.y <= 16 + 8)
                 dir = DOWN;
+            else if (ball.y >= 160 - 8)
+            {
+                end_screen("GAME OVER!", 10);
+                goto START;
+            }
+
             if (ball.x <= 8 + 8)
                 side = RIGHT;
             else if (ball.x >= 166 - 8 - 8)

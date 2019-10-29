@@ -11,6 +11,6 @@ enum DIRECTION reverse_direction(enum DIRECTION dir)
         return DOWN;
     if (dir == DOWN)
         return UP;
-    
+
     return dir;
 }

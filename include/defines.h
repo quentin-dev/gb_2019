@@ -14,4 +14,6 @@
 #define BRICK_L 136
 #define BRICK_R 137
 
+#define LVL1_BRICKS (24 + 21)
+
 #endif // ! DEFINES_H

@@ -17,6 +17,8 @@ struct Ball
     UINT8 x;
     /// Y cooordinate
     UINT8 y;
+    /// Number of bricks hit
+    UINT8 bricks;
 };
 
 /// @brief Moves ball's position in the given direction dir
