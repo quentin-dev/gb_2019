@@ -75,7 +75,6 @@ UINT8 collides_with_house(UINT8 *tiles)
 
 void main(void)
 {
-    UINT8 keys = 0;
     UINT8 frame_skip = 8;
 
     Player *player = create_player();
@@ -112,7 +111,7 @@ void main(void)
 
     while (1)
     {
-        keys = joypad();
+        UINT8 keys = joypad();
 
         UINT8 prev_x = player->x;
         UINT8 prev_y = player->y;
