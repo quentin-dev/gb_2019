@@ -51,8 +51,6 @@ void main(void)
 
     unsigned char tiles[2];
 
-    unsigned char blank[2] = { 0x80, 0x80 };
-
     while(1)
     {
 
