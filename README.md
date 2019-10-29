@@ -21,7 +21,6 @@ The result is the `build/game.gb` file.
 
 You can clean the build directory by running `make clean`.
 
-
 ## State of the project
 
 ### Currently
@@ -38,6 +37,6 @@ make it more readable.
 
 The following things should be added to make this a full game:
 
-* A game over screen
-* A start menu
-* Sound effects / music
+*   A game over screen
+*   A start menu
+*   Sound effects / music
