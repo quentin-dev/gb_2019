@@ -42,6 +42,6 @@ make it more readable.
 
 The following things should be added to make this a full game:
 
-[X]    A game over screen
-[X]    A start menu
-[ ]    Sound effects / music
+- [x] A game over screen
+- [x] A start menu
+- [ ] Sound effects / music
