@@ -49,8 +49,6 @@ void main(void)
     enum DIRECTION dir = DOWN;
     enum DIRECTION side = UP;
 
-    unsigned char tiles[2];
-
     while(1)
     {
 
