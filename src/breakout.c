@@ -11,8 +11,16 @@
 #include "paddle.h"
 #include "ball.h"
 
+void title_screen(void)
+{
+    waitpad(J_START);
+    waitpadup();
+}
+
 void main(void)
 {
+    title_screen();
+
     set_bkg_data(128, TILESET_TILE_COUNT, TILESET);
     set_bkg_tiles(0, 0, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILEMAP);
     SHOW_BKG;
@@ -36,7 +44,7 @@ void main(void)
 
     SHOW_SPRITES;
 
-    UINT8 keys = 0;
+    // UINT8 keys = 0;
 
     enum DIRECTION dir = DOWN;
     enum DIRECTION side = UP;
@@ -48,13 +56,13 @@ void main(void)
     while(1)
     {
 
-        keys = joypad();
+        UINT8 keys = joypad();
 
         if (keys & J_RIGHT)
             move_paddle(&paddle, RIGHT);
         else if (keys & J_LEFT)
             move_paddle(&paddle, LEFT);
-        
+
         if (check_collision(&ball, &paddle))
         {
             dir = UP;
@@ -68,21 +76,6 @@ void main(void)
         }
         else
         {
-            /*
-            get_bkg_tiles((ball.x / 8) + 1, (ball.y / 8) + 2, 2, 1, tiles);
-
-            if (tiles[0] == 0x88 || tiles[1] == 0x89 || tiles[1] == 0x88)
-            {
-                set_bkg_tiles((ball.x / 8) + 1, (ball.y / 8) + 2, 2, 1, blank);
-                dir = reverse_direction(dir);
-            }
-            else if (tiles[0] == 0x89)
-            {
-                set_bkg_tiles(((ball.x) / 8), ((ball.y) / 8) + 2, 2, 1, blank);
-                dir = reverse_direction(dir);
-            }
-            */
-
             if (side != UP && check_brick(&ball, side))
             {
                 side = reverse_direction(side);
@@ -95,13 +88,12 @@ void main(void)
 
             if (ball.y <= 16 + 8)
                 dir = DOWN;
-            
             if (ball.x <= 8 + 8)
                 side = RIGHT;
             else if (ball.x >= 166 - 8 - 8)
                 side = LEFT;
         }
-       
+
         if (side != UP)
             move_ball(&ball, side);
 
