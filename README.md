@@ -29,7 +29,8 @@ You can clean the build directory by running `make clean`.
 
 ### Currently
 
-The game is "playable", meaning you can break the bricks and move the paddle.
+The game is fully functional. There is a start menu, you can play the game
+without any issues and there are ending screens and conditions.
 
 ### Probably
 
@@ -41,6 +42,6 @@ make it more readable.
 
 The following things should be added to make this a full game:
 
-*   A game over screen
-*   A start menu
-*   Sound effects / music
+[X]    A game over screen
+[X]    A start menu
+[ ]    Sound effects / music
