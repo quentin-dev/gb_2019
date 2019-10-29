@@ -1,5 +1,9 @@
 # gb_2019
 
+## Badges
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/821d801c0f2742d28c3a07e043ce8cb3)](https://www.codacy.com/manual/quentin-dev/gb_2019?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=quentin-dev/gb_2019&amp;utm_campaign=Badge_Grade)
+
 ## Setup
 
 1) Make sure you have SDCC installed on your machine
